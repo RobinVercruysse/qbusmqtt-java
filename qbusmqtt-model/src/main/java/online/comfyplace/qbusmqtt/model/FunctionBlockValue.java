@@ -1,4 +1,3 @@
 package online.comfyplace.qbusmqtt.model;
 
-public record Properties() {
-}
+public record FunctionBlockValue() {}

@@ -7,8 +7,8 @@ public record Device(
         Location[] locations,
         String mac,
         String name,
-        Properties properties,
+        DeviceProperties properties,
         String serialNr,
         String type,
-        String version) {
-}
+        String version
+) {}
