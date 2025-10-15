@@ -14,12 +14,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <qbusmqtt-model-version>1.0-SNAPSHOT</qbusmqtt-model-version>
+
         <spring-mqtt-version>6.5.2</spring-mqtt-version>
         <paho-version>1.2.5</paho-version>
         <lombok-version>1.18.42</lombok-version>
         <jackson-version>2.19.2</jackson-version>
         <slf4j-version>2.0.17</slf4j-version>
         <maven-compiler-version>3.13.0</maven-compiler-version>
+
+        <junit-version>6.0.0</junit-version>
+        <json-version>20250517</json-version>
     </properties>
 
     <dependencies>
@@ -57,6 +61,18 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json-version}</version>
         </dependency>
     </dependencies>
 
