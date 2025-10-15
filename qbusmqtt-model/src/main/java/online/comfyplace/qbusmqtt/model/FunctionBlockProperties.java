@@ -1,5 +1,8 @@
 package online.comfyplace.qbusmqtt.model;
 
-public record FunctionBlockProperties(
-        FunctionBlockValue value
-) {}
+import lombok.Builder;
+
+@Builder
+public class FunctionBlockProperties<T extends FunctionBlockValue> {
+    private final T value;
+}
