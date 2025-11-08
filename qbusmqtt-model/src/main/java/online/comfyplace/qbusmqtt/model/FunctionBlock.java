@@ -1,12 +1,15 @@
 package online.comfyplace.qbusmqtt.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.Map;
 
+@Data
+@Accessors(chain = true)
 @NoArgsConstructor
-@AllArgsConstructor
 // aka Output
 public abstract class FunctionBlock<T extends FunctionBlockValue> {
         private String id;
@@ -21,14 +24,20 @@ public abstract class FunctionBlock<T extends FunctionBlockValue> {
 
     public abstract String getType();
 
-    public class AnalogFunctionBlock extends FunctionBlock<FunctionBlockValue.AnalogValue> {
+    @Data
+    @Accessors(chain = true)
+    @EqualsAndHashCode(callSuper = true)
+    public static class AnalogFunctionBlock extends FunctionBlock<FunctionBlockValue.AnalogValue> {
         @Override
         public String getType() {
             return "analog";
         }
     }
 
-    public class OnOffFunctionBlock extends FunctionBlock<FunctionBlockValue.OnOffValue> {
+    @Data
+    @Accessors(chain = true)
+    @EqualsAndHashCode(callSuper = true)
+    public static class OnOffFunctionBlock extends FunctionBlock<FunctionBlockValue.OnOffValue> {
         @Override
         public String getType() {
             return "onoff";

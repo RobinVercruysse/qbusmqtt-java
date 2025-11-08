@@ -1,6 +1,11 @@
 package online.comfyplace.qbusmqtt.model;
 
-public record DeviceProperties(
-        DeviceProperty connectable,
-        DeviceProperty connected
-) {}
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
+public class DeviceProperties {
+    private DeviceProperty connectable;
+    private DeviceProperty connected;
+}

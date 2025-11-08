@@ -1,8 +1,10 @@
 package online.comfyplace.qbusmqtt.model;
 
-import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
-@Builder
+@Data
+@Accessors(chain = true)
 public class FunctionBlockProperties<T extends FunctionBlockValue> {
     private final T value;
 }

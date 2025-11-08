@@ -1,7 +1,12 @@
 package online.comfyplace.qbusmqtt.model;
 
-public record Location(
-        int id,
-        String name,
-        Location[] locations
-) {}
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
+public class Location {
+    private int id;
+    private String name;
+    private Location[] locations;
+}
