@@ -2,7 +2,7 @@
 
 This repository consists of useful modules for Java integrations with Qbus over MQTT.  
 The setup of Qbus' qbusmqtt tool or the MQTT broker are not in scope of this repository.  
-These modules are currently not publicly deployed anywhere.
+These modules are currently not published anywhere.
 
 ## Qbus MQTT Model
 
