@@ -1,7 +1,12 @@
 package online.comfyplace.qbusmqtt.model;
 
-public record Configuration(
-        String app,
-        Device[] devices,
-        String version
-) {}
+import lombok.*;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
+public class Configuration {
+    private String app;
+    private Device[] devices;
+    private String version;
+}

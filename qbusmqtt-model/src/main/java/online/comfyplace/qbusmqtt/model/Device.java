@@ -1,7 +1,7 @@
 package online.comfyplace.qbusmqtt.model;
 
 public record Device(
-        FunctionBlock[] functionBlocks,
+        FunctionBlock<?>[] functionBlocks,
         String id,
         String ip,
         Location[] locations,
