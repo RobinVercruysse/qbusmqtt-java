@@ -15,7 +15,7 @@
 
         <qbusmqtt-model-version>1.0-SNAPSHOT</qbusmqtt-model-version>
 
-        <spring-mqtt-version>6.5.2</spring-mqtt-version>
+        <spring-mqtt-version>6.5.3</spring-mqtt-version>
         <paho-version>1.2.5</paho-version>
         <lombok-version>1.18.42</lombok-version>
         <jackson-version>2.19.2</jackson-version>
