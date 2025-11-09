@@ -4,6 +4,8 @@ This repository consists of useful modules for Java integrations with Qbus over 
 The setup of Qbus' qbusmqtt tool or the MQTT broker are not in scope of this repository.  
 These modules are currently not published anywhere.
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RobinVercruysse_qbusmqtt-java&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=RobinVercruysse_qbusmqtt-java)
+
 ## Qbus MQTT Model
 
 This module holds Java representations of objects used in data sent and received from Qbus MQTT messages.
