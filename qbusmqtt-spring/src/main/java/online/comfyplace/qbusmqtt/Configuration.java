@@ -24,6 +24,7 @@ public class Configuration {
         return new DirectChannel();
     }
 
+    @Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
@@ -48,11 +49,6 @@ public class Configuration {
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public MessageHandler inboundHandler(TopicFactory topicFactory, QbusConfigurationHolder configurationHolder) {
         return new InboundMessageHandler(topicFactory, configurationHolder);
-    }
-
-    @Bean
-    public TopicFactory topicFactory(@Value("${mqtt.topic-prefix}") String topicPrefix) {
-        return new TopicFactory(topicPrefix);
     }
 
     @Bean

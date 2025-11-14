@@ -1,10 +1,12 @@
 package online.comfyplace.qbusmqtt;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-@AllArgsConstructor
+@Component
 public class TopicFactory {
-    private final String topicPrefix;
+    @Value("${mqtt.topic-prefix}")
+    private String topicPrefix;
 
     public String getConfigTopic() {
         return String.format("%s/config", topicPrefix);
