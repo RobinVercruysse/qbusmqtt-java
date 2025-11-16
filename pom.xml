@@ -10,7 +10,7 @@
 
     <properties>
         <sonar.organization>robinvercruysse</sonar.organization>
-        <sonar.coverage.jacoco.xmlReportPaths>${basedir}/qbusmqtt-spring/target/surefire-reports/*.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${basedir}/qbusmqtt-model/target/site/jacoco-aggregate/jacoco.xml,${basedir}/qbusmqtt-spring/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <packaging>pom</packaging>
