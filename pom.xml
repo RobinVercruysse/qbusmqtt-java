@@ -13,4 +13,9 @@
     </properties>
 
     <packaging>pom</packaging>
+
+    <modules>
+        <module>qbusmqtt-model</module>
+        <module>qbusmqtt-spring</module>
+    </modules>
 </project>
