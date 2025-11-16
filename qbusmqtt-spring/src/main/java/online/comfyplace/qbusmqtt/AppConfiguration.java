@@ -98,16 +98,20 @@ public class AppConfiguration {
     }
 
     @Bean
-    public IntegrationFlow mqttErrorFlow() {
+    public IntegrationFlow mqttErrorFlow(MessageChannel mqttErrorChannel, MessageChannel deadLetterChannel) {
         return IntegrationFlow
-                .from("mqttErrorChannel")
-                .handle(message -> {
-                    if (message.getPayload() instanceof MessagingException &&
-                            ((MessagingException) message.getPayload()).getFailedMessage() != null) {
-                        deadLetterChannel().send(((MessagingException) message.getPayload()).getFailedMessage());
-                    }
-                })
+                .from(mqttErrorChannel)
+                .handle(errorFlowHandler(deadLetterChannel))
                 .get();
+    }
+
+    MessageHandler errorFlowHandler(MessageChannel deadLetterChannel) {
+        return message -> {
+            if (message.getPayload() instanceof MessagingException &&
+                    ((MessagingException) message.getPayload()).getFailedMessage() != null) {
+                deadLetterChannel.send(((MessagingException) message.getPayload()).getFailedMessage());
+            }
+        };
     }
 
     @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")

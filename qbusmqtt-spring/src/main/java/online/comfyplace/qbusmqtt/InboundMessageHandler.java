@@ -29,7 +29,7 @@ public class InboundMessageHandler implements MessageHandler {
                 log.info("Qbus configuration received");
                 configurationHolder.setConfiguration(READER.readValue((String) message.getPayload()));
             } catch (JsonProcessingException e) {
-                throw new MessagingException("Failed to set Qbus configuration from json", e);
+                throw new MessagingException(message, "Failed to set Qbus configuration from json", e);
             }
         }
     }

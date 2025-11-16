@@ -4,10 +4,14 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.support.GenericMessage;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class AppConfigurationTest {
 
@@ -34,6 +38,7 @@ class AppConfigurationTest {
         final TopicFactory mockTopicFactory = mock(TopicFactory.class);
         when(mockTopicFactory.getConfigTopic()).thenReturn("config");
         when(mockTopicFactory.getGatewayStateTopic()).thenReturn("gatewayState");
+
         assertNotNull(config.inbound(url, mockTopicFactory));
     }
 
@@ -41,6 +46,7 @@ class AppConfigurationTest {
     void testInboundHandler() {
         final TopicFactory mockTopicFactory = mock(TopicFactory.class);
         final QbusConfigurationHolder mockQbusConfigurationHolder = mock(QbusConfigurationHolder.class);
+
         assertNotNull(config.inboundHandler(mockTopicFactory, mockQbusConfigurationHolder));
     }
 
@@ -49,12 +55,14 @@ class AppConfigurationTest {
         final String url = "tcp://localhost:1883";
         final String username = "username";
         final String password = "password";
+
         assertNotNull(config.connectOptions(url, username, password));
     }
 
     @Test
     void testMqttClientFactory() {
         final MqttConnectOptions connectOptions = mock(MqttConnectOptions.class);
+
         assertNotNull(config.mqttClientFactory(connectOptions));
     }
 
@@ -63,6 +71,7 @@ class AppConfigurationTest {
         final TopicFactory mockTopicFactory = mock(TopicFactory.class);
         when(mockTopicFactory.getGatewayStateTopic()).thenReturn("gatewayState");
         final MqttPahoClientFactory mockClientFactory = mock(MqttPahoClientFactory.class);
+
         assertNotNull(config.outbound(mockTopicFactory, mockClientFactory));
     }
 
@@ -78,6 +87,24 @@ class AppConfigurationTest {
 
     @Test
     void testMqttErrorFlow() {
-        assertNotNull(config.mqttErrorFlow());
+        final MessageChannel mockErrorChannel = mock(MessageChannel.class);
+        final MessageChannel mockDeadLetterChannel = mock(MessageChannel.class);
+
+        assertNotNull(config.mqttErrorFlow(mockErrorChannel, mockDeadLetterChannel));
+    }
+
+    @Test
+    void testErrorFlowHandler() {
+        final MessageChannel mockDeadLetterChannel = mock(MessageChannel.class);
+        final Message<?> failedMessage = new GenericMessage<>("failed");
+        final MessagingException messagingException = new MessagingException(failedMessage, "test", new Exception("cause"));
+        final Message<MessagingException> errorMessage = new GenericMessage<>(messagingException);
+        final MessageHandler errorFlowHandler = config.errorFlowHandler(mockDeadLetterChannel);
+
+        assertNotNull(errorFlowHandler);
+
+        errorFlowHandler.handleMessage(errorMessage);
+
+        verify(mockDeadLetterChannel, times(1)).send(failedMessage);
     }
 }
