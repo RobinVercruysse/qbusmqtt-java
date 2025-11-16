@@ -1,6 +1,7 @@
 package online.comfyplace.qbusmqtt;
 
 import online.comfyplace.qbusmqtt.model.Configuration;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -9,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
 
 import java.util.Map;
@@ -40,5 +42,13 @@ class InboundMessageHandlerTest {
 
         verify(mockConfigurationHolder, times(1)).setConfiguration(any(Configuration.class));
         assertEquals(TestUtil.CONFIGURATION, configurationCaptor.getValue());
+    }
+
+    @Test
+    void testHandleMessage_ThrowsMessagingExceptionWhenJsonParsingFails() {
+        when(mockTopicFactory.getConfigTopic()).thenReturn(CONFIG_TOPIC);
+        final Message<String> message = new GenericMessage<>("<xml></xml>", Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
+
+        Assertions.assertThrows(MessagingException.class, () -> handler.handleMessage(message));
     }
 }

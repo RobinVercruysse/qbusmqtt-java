@@ -9,6 +9,7 @@ import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.core.MessageProducer;
+import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
@@ -17,6 +18,7 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.handler.annotation.Header;
 
 @Import({TopicFactory.class, QbusConfigurationHolder.class})
@@ -44,6 +46,7 @@ public class AppConfiguration {
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
         adapter.setOutputChannel(mqttInputChannel());
+        adapter.setErrorChannel(mqttErrorChannel());
         return adapter;
     }
 
@@ -76,14 +79,35 @@ public class AppConfiguration {
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler outbound(
-            @Value("${mqtt.url}") String url,
-            @Value("${mqtt.username}") String username,
             TopicFactory topicFactory,
             MqttPahoClientFactory mqttPahoClientFactory) {
         MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("pahoOutbound", mqttPahoClientFactory);
         messageHandler.setAsync(true);
         messageHandler.setDefaultTopic(topicFactory.getGatewayStateTopic());
         return messageHandler;
+    }
+
+    @Bean
+    public MessageChannel deadLetterChannel() {
+        return new DirectChannel();
+    }
+
+    @Bean
+    public MessageChannel mqttErrorChannel() {
+        return new DirectChannel();
+    }
+
+    @Bean
+    public IntegrationFlow mqttErrorFlow() {
+        return IntegrationFlow
+                .from("mqttErrorChannel")
+                .handle(message -> {
+                    if (message.getPayload() instanceof MessagingException &&
+                            ((MessagingException) message.getPayload()).getFailedMessage() != null) {
+                        deadLetterChannel().send(((MessagingException) message.getPayload()).getFailedMessage());
+                    }
+                })
+                .get();
     }
 
     @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
