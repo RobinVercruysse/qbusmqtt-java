@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         """)
 @ContextConfiguration(classes = TopicFactory.class)
 @SpringBootTest
-public class TopicFactoryTest {
+class TopicFactoryTest {
     private static final String TOPIC_PREFIX = "testPrefix";
 
     @Autowired

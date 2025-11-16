@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class InboundMessageHandlerTest {
+class InboundMessageHandlerTest {
     private static final String CONFIG_TOPIC = "testPrefix/config";
 
     @Mock

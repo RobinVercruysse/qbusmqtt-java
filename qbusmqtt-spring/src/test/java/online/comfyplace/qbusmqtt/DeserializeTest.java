@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DeserializeTest {
+class DeserializeTest {
     @Test
     void testDeserializeConfiguration() throws Exception {
         final Configuration actualConfiguration = getReader().readValue(TestUtil.CONFIGURATION_JSON);
