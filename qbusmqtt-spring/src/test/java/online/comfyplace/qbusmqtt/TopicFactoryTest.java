@@ -3,7 +3,6 @@ package online.comfyplace.qbusmqtt;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,8 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestPropertySource(properties = """
         mqtt.topic-prefix=testPrefix
         """)
-@ContextConfiguration(classes = TopicFactory.class)
-@SpringBootTest
+@SpringBootTest(classes = TopicFactory.class)
 class TopicFactoryTest {
     private static final String TOPIC_PREFIX = "testPrefix";
 

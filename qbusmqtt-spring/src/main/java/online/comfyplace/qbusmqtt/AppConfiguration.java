@@ -4,6 +4,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
@@ -18,6 +19,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.handler.annotation.Header;
 
+@Import({TopicFactory.class, QbusConfigurationHolder.class})
 @Configuration
 public class AppConfiguration {
     @Bean
@@ -33,7 +35,6 @@ public class AppConfiguration {
     @Bean
     public MessageProducer inbound(
             @Value("${mqtt.url}") String url,
-            @Value("${mqtt.username}") String username,
             TopicFactory topicFactory
     ) {
         final MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(url, "pahoInbound",
