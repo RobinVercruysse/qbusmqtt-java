@@ -6,7 +6,7 @@ import static online.comfyplace.qbusmqtt.TestUtil.CONFIGURATION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class QbusConfigurationHolderTest {
+class QbusConfigurationHolderTest {
     @Test
     void testQbusConfigurationHolder() {
         final QbusConfigurationHolder configHolder = new QbusConfigurationHolder();

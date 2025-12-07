@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 public abstract class FunctionBlockValue {
+    private FunctionBlockValue() {}
+
     @Data
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
