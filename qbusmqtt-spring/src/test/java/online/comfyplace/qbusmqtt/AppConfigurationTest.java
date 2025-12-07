@@ -107,4 +107,27 @@ class AppConfigurationTest {
 
         verify(mockDeadLetterChannel, times(1)).send(failedMessage);
     }
+
+    @Test
+    void testErrorFlowHandlerIgnoresIrrelevantException() {
+        final MessageChannel mockDeadLetterChannel = mock(MessageChannel.class);
+        final Message<IllegalArgumentException> errorMessage = new GenericMessage<>(new IllegalArgumentException());
+        final MessageHandler errorFlowHandler = config.errorFlowHandler(mockDeadLetterChannel);
+
+        errorFlowHandler.handleMessage(errorMessage);
+
+        verifyNoInteractions(mockDeadLetterChannel);
+    }
+
+    @Test
+    void testErrorFlowHandlerIgnoresExceptionsWithoutMessage() {
+        final MessageChannel mockDeadLetterChannel = mock(MessageChannel.class);
+        final MessagingException messagingException = new MessagingException("no failed message");
+        final Message<MessagingException> errorMessage = new GenericMessage<>(messagingException);
+        final MessageHandler errorFlowHandler = config.errorFlowHandler(mockDeadLetterChannel);
+
+        errorFlowHandler.handleMessage(errorMessage);
+
+        verifyNoInteractions(mockDeadLetterChannel);
+    }
 }

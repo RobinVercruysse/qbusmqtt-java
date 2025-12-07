@@ -2,6 +2,7 @@ package online.comfyplace.qbusmqtt;
 
 import online.comfyplace.qbusmqtt.model.Configuration;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,6 +14,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
 
+import java.util.Collections;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,10 +33,14 @@ class InboundMessageHandlerTest {
     @InjectMocks
     private InboundMessageHandler handler;
 
+    @BeforeEach
+    void setUp() {
+        lenient().when(mockTopicFactory.getConfigTopic()).thenReturn(CONFIG_TOPIC);
+    }
+
     @Test
     void testHandleMessage_ParsesAndStoresConfiguration() {
         final ArgumentCaptor<Configuration> configurationCaptor = ArgumentCaptor.forClass(Configuration.class);
-        when(mockTopicFactory.getConfigTopic()).thenReturn(CONFIG_TOPIC);
         doNothing().when(mockConfigurationHolder).setConfiguration(configurationCaptor.capture());
         final Message<String> message = new GenericMessage<>(TestUtil.CONFIGURATION_JSON, Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
 
@@ -46,9 +52,26 @@ class InboundMessageHandlerTest {
 
     @Test
     void testHandleMessage_ThrowsMessagingExceptionWhenJsonParsingFails() {
-        when(mockTopicFactory.getConfigTopic()).thenReturn(CONFIG_TOPIC);
         final Message<String> message = new GenericMessage<>("<xml></xml>", Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
 
         Assertions.assertThrows(MessagingException.class, () -> handler.handleMessage(message));
+    }
+
+    @Test
+    void testHandleMessage_IgnoresMessagesWithoutTopic() {
+        final Message<String> message = new GenericMessage<>("bla", Collections.emptyMap());
+
+        handler.handleMessage(message);
+
+        verifyNoInteractions(mockConfigurationHolder);
+    }
+
+    @Test
+    void testHandleMessage_IgnoresMessagesWithTopicOtherThanConfig() {
+        final Message<String> message = new GenericMessage<>("bla", Map.of(MqttHeaders.RECEIVED_TOPIC, "something"));
+
+        handler.handleMessage(message);
+
+        verifyNoInteractions(mockConfigurationHolder);
     }
 }
