@@ -4,9 +4,11 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.integration.annotation.IntegrationComponentScan;
+import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.config.EnableIntegration;
@@ -22,10 +24,10 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 
 @EnableIntegration
-@IntegrationComponentScan("online.comfyplace.qbusmqtt.gateway")
-@Import({TopicFactory.class, QbusConfigurationHolder.class})
+@IntegrationComponentScan(includeFilters = @ComponentScan.Filter(classes = MessagingGateway.class))
+@Import({TopicFactory.class, QbusConfigurationHolder.class, QbusMqttApi.class})
 @Configuration
-public class AppConfiguration {
+class AppConfiguration {
     @Bean
     public MessageChannel mqttInputChannel() {
         return new DirectChannel();

@@ -15,7 +15,7 @@ import org.springframework.messaging.MessagingException;
 
 @AllArgsConstructor
 @Slf4j
-public class InboundMessageHandler implements MessageHandler {
+class InboundMessageHandler implements MessageHandler {
     private static final ObjectReader READER = createObjectReader();
 
     private final TopicFactory topicFactory;

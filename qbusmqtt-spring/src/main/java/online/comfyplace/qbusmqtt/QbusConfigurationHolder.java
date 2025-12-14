@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
-public class QbusConfigurationHolder {
+class QbusConfigurationHolder {
     private final AtomicReference<Configuration> configuration = new AtomicReference<>();
 
     public Configuration getConfiguration() {
