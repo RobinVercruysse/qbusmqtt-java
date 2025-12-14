@@ -1,13 +1,15 @@
 package online.comfyplace.qbusmqtt;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.integration.annotation.MessagingGateway;
+import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
@@ -15,12 +17,12 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
-import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
-import org.springframework.messaging.handler.annotation.Header;
 
+@EnableIntegration
+@IntegrationComponentScan("online.comfyplace.qbusmqtt.gateway")
 @Import({TopicFactory.class, QbusConfigurationHolder.class})
 @Configuration
 public class AppConfiguration {
@@ -98,24 +100,21 @@ public class AppConfiguration {
     }
 
     @Bean
-    public IntegrationFlow mqttErrorFlow(MessageChannel mqttErrorChannel, MessageChannel deadLetterChannel) {
+    public IntegrationFlow mqttErrorFlow(
+            @Qualifier("mqttErrorChannel") MessageChannel mqttErrorChannel,
+            @Qualifier("deadLetterChannel") MessageChannel deadLetterChannel) {
         return IntegrationFlow
                 .from(mqttErrorChannel)
                 .handle(errorFlowHandler(deadLetterChannel))
                 .get();
     }
 
-    MessageHandler errorFlowHandler(MessageChannel deadLetterChannel) {
+    MessageHandler errorFlowHandler(@Qualifier("deadLetterChannel") MessageChannel deadLetterChannel) {
         return message -> {
             if (message.getPayload() instanceof MessagingException &&
                     ((MessagingException) message.getPayload()).getFailedMessage() != null) {
                 deadLetterChannel.send(((MessagingException) message.getPayload()).getFailedMessage());
             }
         };
-    }
-
-    @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
-    public interface MqttGateway {
-        void sendToMqtt(@Header(MqttHeaders.TOPIC) String topic, String data);
     }
 }
