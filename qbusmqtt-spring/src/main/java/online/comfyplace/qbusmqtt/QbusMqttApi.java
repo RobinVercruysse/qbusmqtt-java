@@ -15,6 +15,6 @@ public class QbusMqttApi {
 
     public void init() {
         LOGGER.info("Requesting Qbus configuration...");
-        gateway.sendToMqtt(topicFactory.getConfigTopic(), "");
+        gateway.sendToMqtt(topicFactory.getGetConfigTopic(), "");
     }
 }
