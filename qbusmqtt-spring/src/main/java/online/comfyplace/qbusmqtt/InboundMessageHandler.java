@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import online.comfyplace.qbusmqtt.model.Configuration;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -20,17 +21,23 @@ class InboundMessageHandler implements MessageHandler {
 
     private final TopicFactory topicFactory;
     private final QbusConfigurationHolder configurationHolder;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public void handleMessage(@NonNull Message<?> message) throws MessagingException {
-        if (message.getHeaders().containsKey(MqttHeaders.RECEIVED_TOPIC)
-                && topicFactory.getConfigTopic().equals(message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC, String.class))) {
+        final String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC, String.class);
+        final String content = String.valueOf(message.getPayload());
+        // TODO filter out non-qbus topics
+        if (topicFactory.getConfigTopic().equals(topic)) {
             try {
-                log.info("Qbus configuration received");
-                configurationHolder.setConfiguration(READER.readValue((String) message.getPayload()));
+                configurationHolder.setConfiguration(READER.readValue(content));
             } catch (JsonProcessingException e) {
-                throw new MessagingException(message, "Failed to set Qbus configuration from json", e);
+                throw new MessagingException(message, "Failed to parse Qbus configuration message", e);
+            } finally {
+                applicationEventPublisher.publishEvent(new MqttMessage(topic, content));
             }
+        } else {
+            applicationEventPublisher.publishEvent(new MqttMessage(topic, content));
         }
     }
 

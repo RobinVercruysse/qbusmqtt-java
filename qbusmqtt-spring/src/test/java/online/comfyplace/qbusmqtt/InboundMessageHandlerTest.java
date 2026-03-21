@@ -9,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
@@ -30,6 +31,9 @@ class InboundMessageHandlerTest {
     @Mock
     private QbusConfigurationHolder mockConfigurationHolder;
 
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @InjectMocks
     private InboundMessageHandler handler;
 
@@ -43,35 +47,44 @@ class InboundMessageHandlerTest {
         final ArgumentCaptor<Configuration> configurationCaptor = ArgumentCaptor.forClass(Configuration.class);
         doNothing().when(mockConfigurationHolder).setConfiguration(configurationCaptor.capture());
         final Message<String> message = new GenericMessage<>(TestUtil.CONFIGURATION_JSON, Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
+        final MqttMessage expectedMqttMessage = new MqttMessage(CONFIG_TOPIC, TestUtil.CONFIGURATION_JSON);
 
         handler.handleMessage(message);
 
         verify(mockConfigurationHolder, times(1)).setConfiguration(any(Configuration.class));
         assertEquals(TestUtil.CONFIGURATION, configurationCaptor.getValue());
+        verify(applicationEventPublisher, times(1)).publishEvent(expectedMqttMessage);
     }
 
     @Test
     void testHandleMessage_ThrowsMessagingExceptionWhenJsonParsingFails() {
-        final Message<String> message = new GenericMessage<>("<xml></xml>", Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
+        final String payload = "<xml></xml>";
+        final Message<String> message = new GenericMessage<>(payload, Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
+        final MqttMessage expectedMqttMessage = new MqttMessage(CONFIG_TOPIC, payload);
 
         Assertions.assertThrows(MessagingException.class, () -> handler.handleMessage(message));
+        verify(applicationEventPublisher, times(1)).publishEvent(expectedMqttMessage);
     }
 
     @Test
-    void testHandleMessage_IgnoresMessagesWithoutTopic() {
+    void testHandleMessage_DoesNotStoreMessagesWithoutTopicInConfig() {
         final Message<String> message = new GenericMessage<>("bla", Collections.emptyMap());
+        final MqttMessage expectedMqttMessage = new MqttMessage(null, "bla");
 
         handler.handleMessage(message);
 
         verifyNoInteractions(mockConfigurationHolder);
+        verify(applicationEventPublisher, times(1)).publishEvent(expectedMqttMessage);
     }
 
     @Test
-    void testHandleMessage_IgnoresMessagesWithTopicOtherThanConfig() {
+    void testHandleMessage_DoesNotStoreNonConfigMessagesInConfig() {
         final Message<String> message = new GenericMessage<>("bla", Map.of(MqttHeaders.RECEIVED_TOPIC, "something"));
+        final MqttMessage expectedMqttMessage = new MqttMessage("something", "bla");
 
         handler.handleMessage(message);
 
         verifyNoInteractions(mockConfigurationHolder);
+        verify(applicationEventPublisher, times(1)).publishEvent(expectedMqttMessage);
     }
 }

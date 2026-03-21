@@ -3,6 +3,7 @@ package online.comfyplace.qbusmqtt;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -56,8 +57,8 @@ class AppConfiguration {
 
     @Bean
     @ServiceActivator(inputChannel = "mqttInputChannel")
-    public MessageHandler inboundHandler(TopicFactory topicFactory, QbusConfigurationHolder configurationHolder) {
-        return new InboundMessageHandler(topicFactory, configurationHolder);
+    public MessageHandler inboundHandler(TopicFactory topicFactory, QbusConfigurationHolder configurationHolder, ApplicationEventPublisher publisher) {
+        return new InboundMessageHandler(topicFactory, configurationHolder, publisher);
     }
 
     @Bean
@@ -118,5 +119,11 @@ class AppConfiguration {
                 deadLetterChannel.send(((MessagingException) message.getPayload()).getFailedMessage());
             }
         };
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "deadLetterChannel")
+    public MessageHandler deadLetter() {
+        return new DeadLetterMessageHandler();
     }
 }

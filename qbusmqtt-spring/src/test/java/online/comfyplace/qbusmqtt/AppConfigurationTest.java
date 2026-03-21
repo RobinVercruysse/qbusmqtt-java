@@ -3,6 +3,7 @@ package online.comfyplace.qbusmqtt;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -46,8 +47,9 @@ class AppConfigurationTest {
     void testInboundHandler() {
         final TopicFactory mockTopicFactory = mock(TopicFactory.class);
         final QbusConfigurationHolder mockQbusConfigurationHolder = mock(QbusConfigurationHolder.class);
+        final ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
 
-        assertNotNull(config.inboundHandler(mockTopicFactory, mockQbusConfigurationHolder));
+        assertNotNull(config.inboundHandler(mockTopicFactory, mockQbusConfigurationHolder, applicationEventPublisher));
     }
 
     @Test
