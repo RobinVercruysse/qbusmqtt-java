@@ -4,6 +4,7 @@ import online.comfyplace.qbusmqtt.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
 class TestUtil {
@@ -119,65 +120,46 @@ class TestUtil {
             "app", "myApp",
             "devices", new JSONObject[]{
                     new JSONObject(Map.of(
-                            "functionBlocks", new JSONObject[]{},
-                            "id", "myId1",
-                            "ip", "192.168.0.1",
-                            "locations", new JSONObject[]{
+                            "functionBlocks", new JSONArray(List.of(
                                     new JSONObject(Map.of(
-                                            "id", 1,
-                                            "name", "location1",
-                                            "locations", new JSONObject[]{
-                                                    new JSONObject(Map.of(
-                                                            "id", 2,
-                                                            "name", "location2"
+                                            "actions", new JSONObject(Map.of(
+                                                    "off", JSONObject.NULL,
+                                                    "on", JSONObject.NULL
+                                            )),
+                                            "id", "outputId",
+                                            "location", "",
+                                            "locationId", 0,
+                                            "name", "outputName",
+                                            "originalName", "originalOutputName",
+                                            "properties", new JSONObject(Map.of(
+                                                    "value", new JSONObject(Map.of(
+                                                            "read", true,
+                                                            "type", "boolean",
+                                                            "write", true
                                                     ))
-                                            }
-                                    )),
-                                    new JSONObject(Map.of(
-                                            "id", 3,
-                                            "name", "location3"
+                                            )),
+                                            "refId", "outputRefId",
+                                            "type", "onoff"
                                     ))
-                            },
-                            "mac", "123456789012",
-                            "name", "myDeviceName1",
+                            )),
+                            "id", "controllerId",
+                            "ip", "127.0.0.1",
+                            "mac", "controllerMac",
+                            "name", "controllerName",
                             "properties", new JSONObject(Map.of(
                                     "connectable", new JSONObject(Map.of(
                                             "read", true,
-                                            "type", "connectableType1",
-                                            "write", true
-                                    )),
-                                    "connected", new JSONObject(Map.of(
-                                            "read", false,
-                                            "type", "connectedType1",
-                                            "write", false
-                                    )))),
-
-                            "serialNr", "123456",
-
-                            "type", "myType1",
-                            "version", "1.2.3"
-                    )),
-                    new JSONObject(Map.of(
-                            "functionBlocks", new JSONObject[]{},
-                            "id", "myId2",
-                            "ip", "192.168.0.2",
-                            "locations", new JSONObject[]{},
-                            "mac", "234567890123",
-                            "name", "myDeviceName2",
-                            "properties", new JSONObject(Map.of(
-                                    "connectable", new JSONObject(Map.of(
-                                            "read", false,
-                                            "type", "connectableType2",
+                                            "type", "boolean",
                                             "write", false
                                     )),
                                     "connected", new JSONObject(Map.of(
                                             "read", true,
-                                            "type", "connectedType2",
-                                            "write", true
-                                    )))),
-                            "serialNr", "234567",
-                            "type", "myType2",
-                            "version", "2.3.4"
+                                            "type", "boolean",
+                                            "write", false
+                                    ))
+                            )),
+                            "serialNr", "controllerSerialNr",
+                            "type", "Qbus"
                     ))
             },
             "version", "myVersion"
