@@ -46,13 +46,13 @@ class InboundMessageHandlerTest {
     void testHandleMessage_ParsesAndStoresConfiguration() {
         final ArgumentCaptor<Configuration> configurationCaptor = ArgumentCaptor.forClass(Configuration.class);
         doNothing().when(mockConfigurationHolder).setConfiguration(configurationCaptor.capture());
-        final Message<String> message = new GenericMessage<>(TestUtil.CONFIGURATION_JSON, Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
-        final MqttMessage expectedMqttMessage = new MqttMessage(CONFIG_TOPIC, TestUtil.CONFIGURATION_JSON);
+        final Message<String> message = new GenericMessage<>(TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS_JSON, Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
+        final MqttMessage expectedMqttMessage = new MqttMessage(CONFIG_TOPIC, TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS_JSON);
 
         handler.handleMessage(message);
 
         verify(mockConfigurationHolder, times(1)).setConfiguration(any(Configuration.class));
-        assertEquals(TestUtil.CONFIGURATION, configurationCaptor.getValue());
+        assertEquals(TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS, configurationCaptor.getValue());
         verify(applicationEventPublisher, times(1)).publishEvent(expectedMqttMessage);
     }
 

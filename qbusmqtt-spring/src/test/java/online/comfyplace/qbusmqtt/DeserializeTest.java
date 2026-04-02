@@ -1,7 +1,6 @@
 package online.comfyplace.qbusmqtt;
 
 import com.fasterxml.jackson.databind.ObjectReader;
-import online.comfyplace.qbusmqtt.model.*;
 import online.comfyplace.qbusmqtt.model.Configuration;
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DeserializeTest {
     @Test
-    void testDeserializeConfiguration() throws Exception {
-        final Configuration actualConfiguration = getReader().readValue(TestUtil.CONFIGURATION_JSON);
+    void testDeserializeConfiguration_onlyController() throws Exception {
+        final Configuration actualConfiguration = getReader().readValue(TestUtil.CONFIGURATION_ONLY_CONTROLLER_JSON);
 
-        assertEquals(TestUtil.CONFIGURATION, actualConfiguration);
+        assertEquals(TestUtil.CONFIGURATION_ONLY_CONTROLLER, actualConfiguration);
+    }
+
+    @Test
+    void testDeserializeConfiguration_withFunctionBlocks() throws Exception {
+        final Configuration actualConfiguration = getReader().readValue(TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS_JSON);
+
+        assertEquals(TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS, actualConfiguration);
     }
 
     private static ObjectReader getReader() throws NoSuchFieldException, IllegalAccessException {
@@ -22,4 +28,6 @@ class DeserializeTest {
         readerField.setAccessible(true);
         return (ObjectReader) readerField.get(null);
     }
+
+
 }

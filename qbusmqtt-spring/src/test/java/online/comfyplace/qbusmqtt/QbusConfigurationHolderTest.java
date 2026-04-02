@@ -2,7 +2,7 @@ package online.comfyplace.qbusmqtt;
 
 import org.junit.jupiter.api.Test;
 
-import static online.comfyplace.qbusmqtt.TestUtil.CONFIGURATION;
+import static online.comfyplace.qbusmqtt.TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -13,8 +13,8 @@ class QbusConfigurationHolderTest {
 
         assertNull(configHolder.getConfiguration());
 
-        configHolder.setConfiguration(CONFIGURATION);
+        configHolder.setConfiguration(CONFIGURATION_WITH_FUNCTIONBLOCKS);
 
-        assertEquals(CONFIGURATION, configHolder.getConfiguration());
+        assertEquals(CONFIGURATION_WITH_FUNCTIONBLOCKS, configHolder.getConfiguration());
     }
 }

@@ -6,7 +6,29 @@ import org.json.JSONObject;
 import java.util.Map;
 
 class TestUtil {
-    static final Configuration CONFIGURATION = new Configuration()
+    static final Configuration CONFIGURATION_ONLY_CONTROLLER = new Configuration()
+            .setApp("myApp")
+            .setDevices(new Device[]{
+                    new Device()
+                            .setId("controllerId")
+                            .setIp("127.0.0.1")
+                            .setMac("controllerMac")
+                            .setName("controllerName")
+                            .setProperties(new DeviceProperties()
+                                .setConnectable(new DeviceProperty()
+                                        .setRead(true)
+                                        .setType("boolean")
+                                        .setWrite(false))
+                                .setConnected(new DeviceProperty()
+                                        .setRead(true)
+                                        .setType("boolean")
+                                        .setWrite(false)))
+                            .setSerialNr("controllerSerialNr")
+                            .setType("Qbus")
+            })
+            .setVersion("myVersion");
+
+    static final Configuration CONFIGURATION_WITH_FUNCTIONBLOCKS = new Configuration()
             .setApp("myApp")
             .setDevices(new Device[]{
                     new Device()
@@ -63,7 +85,34 @@ class TestUtil {
             })
             .setVersion("myVersion");
 
-    static final String CONFIGURATION_JSON = new JSONObject(Map.of(
+    static final String CONFIGURATION_ONLY_CONTROLLER_JSON = new JSONObject(Map.of(
+            "app", "myApp",
+            "devices", new JSONObject[]{
+                    new JSONObject(Map.of(
+                            "id", "controllerId",
+                            "ip", "127.0.0.1",
+                            "mac", "controllerMac",
+                            "name", "controllerName",
+                            "properties", new JSONObject(Map.of(
+                                    "connectable", new JSONObject(Map.of(
+                                            "read", true,
+                                            "type", "boolean",
+                                            "write", false
+                                    )),
+                                    "connected", new JSONObject(Map.of(
+                                            "read", true,
+                                            "type", "boolean",
+                                            "write", false
+                                    ))
+                            )),
+                            "serialNr", "controllerSerialNr",
+                            "type", "Qbus"
+                    ))
+            },
+            "version", "myVersion"
+    )).toString();
+
+    static final String CONFIGURATION_WITH_FUNCTIONBLOCKS_JSON = new JSONObject(Map.of(
             "app", "myApp",
             "devices", new JSONObject[]{
                     new JSONObject(Map.of(
