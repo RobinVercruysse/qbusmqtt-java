@@ -1,6 +1,7 @@
 package online.comfyplace.qbusmqtt;
 
 import online.comfyplace.qbusmqtt.model.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ class TestUtil {
             .setApp("myApp")
             .setDevices(new Device[]{
                     new Device()
+                            .setFunctionBlocks(new FunctionBlock[]{})
                             .setId("controllerId")
                             .setIp("127.0.0.1")
                             .setMac("controllerMac")
@@ -89,6 +91,7 @@ class TestUtil {
             "app", "myApp",
             "devices", new JSONObject[]{
                     new JSONObject(Map.of(
+                            "functionBlocks", new JSONArray(),
                             "id", "controllerId",
                             "ip", "127.0.0.1",
                             "mac", "controllerMac",
