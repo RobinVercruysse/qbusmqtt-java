@@ -35,58 +35,28 @@ class TestUtil {
             .setApp("myApp")
             .setDevices(new Device[]{
                     new Device()
-                            .setFunctionBlocks(new FunctionBlock[]{})
-                            .setId("myId1")
-                            .setIp("192.168.0.1")
-                            .setLocations(new Location[]{
-                                    new Location()
-                                            .setId(1)
-                                            .setName("location1")
-                                            .setLocations(new Location[]{
-                                                    new Location()
-                                                            .setId(2)
-                                                            .setName("location2")
-                                            }
-                                    ),
-                                    new Location()
-                                            .setId(3)
-                                            .setName("location3")
+                            .setFunctionBlocks(new FunctionBlock[]{
+                                    new FunctionBlock.OnOffFunctionBlock()
                             })
-                            .setMac("123456789012")
-                            .setName("myDeviceName1")
+                            .setId("controllerId")
+                            .setIp("127.0.0.1")
+                            .setLocations(new Location[]{})
+                            .setMac("controllerMac")
+                            .setName("controllerName")
                             .setProperties(new DeviceProperties()
                                     .setConnectable(new DeviceProperty()
                                             .setRead(true)
-                                            .setType("connectableType1")
-                                            .setWrite(true))
-                                    .setConnected(new DeviceProperty()
-                                            .setRead(false)
-                                            .setType("connectedType1")
-                                            .setWrite(false)))
-                            .setSerialNr("123456")
-                            .setType("myType1")
-                            .setVersion("1.2.3"),
-                    new Device()
-                            .setFunctionBlocks(new FunctionBlock[]{})
-                            .setId("myId2")
-                            .setIp("192.168.0.2")
-                            .setLocations(new Location[]{})
-                            .setMac("234567890123")
-                            .setName("myDeviceName2")
-                            .setProperties(new DeviceProperties()
-                                    .setConnectable(new DeviceProperty()
-                                            .setRead(false)
-                                            .setType("connectableType2")
+                                            .setType("boolean")
                                             .setWrite(false))
                                     .setConnected(new DeviceProperty()
                                             .setRead(true)
-                                            .setType("connectedType2")
-                                            .setWrite(true)))
-                            .setSerialNr("234567")
-                            .setType("myType2")
-                            .setVersion("2.3.4")
+                                            .setType("boolean")
+                                            .setWrite(false)))
+                            .setSerialNr("controllerSerialNr")
+                            .setType("Qbus")
+                            .setVersion("controllerVersion")
             })
-            .setVersion("myVersion");
+            .setVersion("configVersion");
 
     static final String CONFIGURATION_ONLY_CONTROLLER_JSON = new JSONObject(Map.of(
             "app", "myApp",
@@ -144,6 +114,7 @@ class TestUtil {
                             )),
                             "id", "controllerId",
                             "ip", "127.0.0.1",
+                            "locations", new JSONArray(),
                             "mac", "controllerMac",
                             "name", "controllerName",
                             "properties", new JSONObject(Map.of(
@@ -159,9 +130,10 @@ class TestUtil {
                                     ))
                             )),
                             "serialNr", "controllerSerialNr",
-                            "type", "Qbus"
+                            "type", "Qbus",
+                            "version", "controllerVersion"
                     ))
             },
-            "version", "myVersion"
+            "version", "configVersion"
     )).toString();
 }
