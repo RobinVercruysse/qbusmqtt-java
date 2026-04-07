@@ -4,6 +4,7 @@ import online.comfyplace.qbusmqtt.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,22 @@ class TestUtil {
                     new Device()
                             .setFunctionBlocks(new FunctionBlock[]{
                                     new FunctionBlock.OnOffFunctionBlock()
+                                            .setActions(new HashMap<>() {{
+                                                put("off", null);
+                                                put("on", null);
+                                            }})
+                                            .setId("outputId")
+                                            .setLocation("")
+                                            .setLocationId(0)
+                                            .setName("outputName")
+                                            .setOriginalName("originalOutputName")
+                                            .setProperties(new FunctionBlockProperties()
+                                                    .setValue(Map.of(
+                                                            "read", true,
+                                                            "type", "boolean",
+                                                            "write", true
+                                                    )))
+                                            .setRefId("outputRefId")
                             })
                             .setId("controllerId")
                             .setIp("127.0.0.1")
