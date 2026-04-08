@@ -96,6 +96,11 @@ class AppConfigurationTest {
     }
 
     @Test
+    void testdeadLetterHandler() {
+        assertNotNull(config.deadLetter());
+    }
+
+    @Test
     void testErrorFlowHandler() {
         final MessageChannel mockDeadLetterChannel = mock(MessageChannel.class);
         final Message<?> failedMessage = new GenericMessage<>("failed");
