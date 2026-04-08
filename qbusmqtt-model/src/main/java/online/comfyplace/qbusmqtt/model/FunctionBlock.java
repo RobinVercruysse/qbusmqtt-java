@@ -1,5 +1,7 @@
 package online.comfyplace.qbusmqtt.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,14 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = FunctionBlock.OnOffFunctionBlock.class, name = "onoff")
+})
 // aka Output
 public abstract class FunctionBlock<T extends FunctionBlockValue> {
         private String id;

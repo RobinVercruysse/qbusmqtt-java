@@ -6,5 +6,5 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class FunctionBlockProperties<T extends FunctionBlockValue> {
-    private final T value;
+    private T value;
 }
