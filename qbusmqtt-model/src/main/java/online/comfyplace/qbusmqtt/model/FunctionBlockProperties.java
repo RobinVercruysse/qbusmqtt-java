@@ -5,6 +5,6 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class FunctionBlockProperties {
-    private Object value;
+public class FunctionBlockProperties<T extends FunctionBlockValue> {
+    private T value;
 }

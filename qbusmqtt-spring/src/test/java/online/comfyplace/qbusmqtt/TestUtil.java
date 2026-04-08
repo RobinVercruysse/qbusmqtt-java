@@ -47,12 +47,12 @@ class TestUtil {
                                             .setLocationId(0)
                                             .setName("outputName")
                                             .setOriginalName("originalOutputName")
-                                            .setProperties(new FunctionBlockProperties()
-                                                    .setValue(Map.of(
-                                                            "read", true,
-                                                            "type", "boolean",
-                                                            "write", true
-                                                    )))
+                                            .setProperties(new FunctionBlockProperties<FunctionBlockValue.OnOffValue>()
+                                                    .setValue(new FunctionBlockValue.OnOffValue()
+                                                            .setRead(true)
+                                                            .setType("boolean")
+                                                            .setWrite(true))
+                                            )
                                             .setRefId("outputRefId")
                             })
                             .setId("controllerId")

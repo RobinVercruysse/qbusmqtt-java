@@ -26,7 +26,7 @@ public abstract class FunctionBlock<T extends FunctionBlockValue> {
         private String name;
         private String originalName;
         private String refId;
-        private FunctionBlockProperties properties;
+        private FunctionBlockProperties<T> properties;
         private Map<String, Object> actions;
         private String location; // TODO model locationId + location as Location object?
         private int locationId;
