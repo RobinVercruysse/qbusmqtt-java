@@ -1,8 +1,8 @@
 package online.comfyplace.qbusmqtt;
 
-import com.fasterxml.jackson.databind.ObjectReader;
 import online.comfyplace.qbusmqtt.model.Configuration;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectReader;
 
 import java.lang.reflect.Field;
 
@@ -28,6 +28,4 @@ class DeserializeTest {
         readerField.setAccessible(true);
         return (ObjectReader) readerField.get(null);
     }
-
-
 }
