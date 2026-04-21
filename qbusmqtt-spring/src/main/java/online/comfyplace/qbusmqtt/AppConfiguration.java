@@ -26,7 +26,7 @@ import org.springframework.messaging.MessagingException;
 
 @EnableIntegration
 @IntegrationComponentScan(includeFilters = @ComponentScan.Filter(classes = MessagingGateway.class))
-@Import({TopicFactory.class, QbusConfigurationHolder.class, QbusMqttApi.class})
+@Import({TopicFactory.class, QbusConfigurationHolder.class, QbusMqttApi.class, QbusMqttStartupListener.class})
 @Configuration
 class AppConfiguration {
     @Bean
