@@ -3,6 +3,7 @@ package online.comfyplace.qbusmqtt;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import online.comfyplace.qbusmqtt.event.QbusMqttEvent;
 import online.comfyplace.qbusmqtt.model.Configuration;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.integration.mqtt.support.MqttHeaders;
@@ -34,10 +35,10 @@ class InboundMessageHandler implements MessageHandler {
             } catch (JacksonException e) {
                 throw new MessagingException(message, "Failed to parse Qbus configuration message", e);
             } finally {
-                applicationEventPublisher.publishEvent(new MqttMessage(topic, content));
+                applicationEventPublisher.publishEvent(new QbusMqttEvent(topic, content, QbusMqttEvent.EventType.CONFIGURATION_LOADED));
             }
         } else {
-            applicationEventPublisher.publishEvent(new MqttMessage(topic, content));
+            applicationEventPublisher.publishEvent(new QbusMqttEvent(topic, content, QbusMqttEvent.EventType.OTHER));
         }
     }
 }
