@@ -47,6 +47,7 @@ class AppConfiguration {
         final MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(url, "pahoInbound",
                 topicFactory.getGatewayStateTopic(),
                 topicFactory.getConfigTopic());
+        adapter.setManualAcks(false);
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
