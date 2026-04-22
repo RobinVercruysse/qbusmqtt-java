@@ -48,7 +48,7 @@ class InboundMessageHandlerTest {
         final ArgumentCaptor<Configuration> configurationCaptor = ArgumentCaptor.forClass(Configuration.class);
         doNothing().when(mockConfigurationHolder).setConfiguration(configurationCaptor.capture());
         final Message<String> message = new GenericMessage<>(TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS_JSON, Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
-        final QbusMqttEvent expectedEvent = new QbusMqttEvent(CONFIG_TOPIC, TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS_JSON, QbusMqttEvent.EventType.CONFIGURATION_LOADED);
+        final QbusMqttEvent expectedEvent = new QbusMqttEvent(CONFIG_TOPIC, TestUtil.CONFIGURATION_WITH_FUNCTIONBLOCKS_JSON, QbusMqttEvent.EventType.CONFIGURATION_UPDATED);
 
         handler.handleMessage(message);
 
@@ -61,7 +61,7 @@ class InboundMessageHandlerTest {
     void testHandleMessage_ThrowsMessagingExceptionWhenJsonParsingFails() {
         final String payload = "<xml></xml>";
         final Message<String> message = new GenericMessage<>(payload, Map.of(MqttHeaders.RECEIVED_TOPIC, CONFIG_TOPIC));
-        final QbusMqttEvent expectedEvent = new QbusMqttEvent(CONFIG_TOPIC, payload, QbusMqttEvent.EventType.CONFIGURATION_LOADED);
+        final QbusMqttEvent expectedEvent = new QbusMqttEvent(CONFIG_TOPIC, payload, QbusMqttEvent.EventType.CONFIGURATION_UPDATED);
 
         Assertions.assertThrows(MessagingException.class, () -> handler.handleMessage(message));
         verify(applicationEventPublisher, times(1)).publishEvent(expectedEvent);

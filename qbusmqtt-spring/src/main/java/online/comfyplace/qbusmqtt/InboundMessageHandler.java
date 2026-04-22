@@ -35,7 +35,7 @@ class InboundMessageHandler implements MessageHandler {
             } catch (JacksonException e) {
                 throw new MessagingException(message, "Failed to parse Qbus configuration message", e);
             } finally {
-                applicationEventPublisher.publishEvent(new QbusMqttEvent(topic, content, QbusMqttEvent.EventType.CONFIGURATION_LOADED));
+                applicationEventPublisher.publishEvent(new QbusMqttEvent(topic, content, QbusMqttEvent.EventType.CONFIGURATION_UPDATED));
             }
         } else {
             applicationEventPublisher.publishEvent(new QbusMqttEvent(topic, content, QbusMqttEvent.EventType.OTHER));
