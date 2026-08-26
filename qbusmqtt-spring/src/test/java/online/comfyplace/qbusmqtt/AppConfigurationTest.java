@@ -10,6 +10,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -136,5 +137,12 @@ class AppConfigurationTest {
         errorFlowHandler.handleMessage(errorMessage);
 
         verifyNoInteractions(mockDeadLetterChannel);
+    }
+
+    @Test
+    void testObjectMapper() {
+        final ObjectMapper mapper = config.objectMapper();
+
+        assertNotNull(mapper);
     }
 }

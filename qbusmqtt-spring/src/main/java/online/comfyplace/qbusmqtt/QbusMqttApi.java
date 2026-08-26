@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import online.comfyplace.qbusmqtt.model.FunctionBlockState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 @AllArgsConstructor
 public class QbusMqttApi {
     @Autowired
-    private JsonMapper mapper;
+    private ObjectMapper mapper;
 
     private final MqttGateway gateway;
     private final TopicFactory topicFactory;

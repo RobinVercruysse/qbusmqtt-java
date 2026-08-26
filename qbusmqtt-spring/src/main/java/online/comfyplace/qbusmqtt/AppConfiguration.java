@@ -23,6 +23,8 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @EnableIntegration
 @IntegrationComponentScan(includeFilters = @ComponentScan.Filter(classes = MessagingGateway.class))
@@ -126,5 +128,10 @@ class AppConfiguration {
     @ServiceActivator(inputChannel = "deadLetterChannel")
     public MessageHandler deadLetter() {
         return new DeadLetterMessageHandler();
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return JsonMapper.builder().build();
     }
 }
